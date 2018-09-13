@@ -14,24 +14,23 @@ static TextLayer *s_textlayer_60;
 static TextLayer *s_textlayer_90;
 static TextLayer *s_textlayer_count;
 static TextLayer *s_textlayer_over;
-static TextLayer *s_textlayer_hr;
 
 #ifdef PBL_SDK_3
 static StatusBarLayer *s_status_bar;
 #endif
 
 #ifndef STATUS_BAR_LAYER_HEIGHT
-#define STATUS_BAR_LAYER_HEIGHT 0
+	#define STATUS_BAR_LAYER_HEIGHT 0
 #endif
 
 #ifndef PBL_PLATFORM_APLITE
-#define MENU_TOP 12
-#define MENU_MIDDLE 62
-#define MENU_BOTTOM 112
+	#define MENU_TOP 12
+	#define MENU_MIDDLE 62
+	#define MENU_BOTTOM 112
 #else
-#define MENU_TOP 6
-#define MENU_MIDDLE 54
-#define MENU_BOTTOM 102
+	#define MENU_TOP 6
+	#define MENU_MIDDLE 54
+	#define MENU_BOTTOM 102
 #endif
 
 
@@ -103,16 +102,7 @@ static void initialise_ui(void) {
   text_layer_set_text(s_textlayer_over, "0:00");
   text_layer_set_font(s_textlayer_over, s_res_roboto_condensed_21);
   layer_add_child(window_get_root_layer(s_window), (Layer *)s_textlayer_over);
-
-   // s_textlayer_hr
-   s_textlayer_hr = text_layer_create(GRect(39, PBL_DISPLAY_HEIGHT - 25, 100, 25));
-   text_layer_set_background_color(s_textlayer_hr, GColorBlack);
-   text_layer_set_text_color(s_textlayer_hr, GColorWhite);
-   text_layer_set_text(s_textlayer_hr, "");
-   text_layer_set_text_alignment(s_textlayer_hr, GTextAlignmentRight);
-   text_layer_set_font(s_textlayer_hr, s_res_roboto_condensed_21);
-   layer_add_child(window_get_root_layer(s_window), (Layer *)s_textlayer_hr);
- }
+}
 
 static void destroy_ui(void) {
   window_destroy(s_window);
@@ -122,21 +112,11 @@ static void destroy_ui(void) {
   text_layer_destroy(s_textlayer_90);
   text_layer_destroy(s_textlayer_count);
   text_layer_destroy(s_textlayer_over);
-  text_layer_destroy(s_textlayer_hr);
   gbitmap_destroy(s_res_image_go);
 }
 // END AUTO-GENERATED UI CODE
 
-static uint16_t s_curr_hr = 0;
-
 void tick_handler(struct tm *tick_time, TimeUnits units_changed){
-  static char s_hrm_buffer[8];
-
-  if (s_curr_hr > 0) {
-    snprintf(s_hrm_buffer, sizeof(s_hrm_buffer), "%lu BPM", (uint32_t) s_curr_hr);
-    text_layer_set_text(s_textlayer_hr, s_hrm_buffer);
-  }
-
   if (m_timeout != 0) {
     // out of time
     time_t now = time(NULL) - m_timeout;
@@ -196,8 +176,7 @@ void start_counter(int seconds) {
 
   layer_set_hidden(text_layer_get_layer(s_textlayer_over), true);
 
-  // show counter
-  layer_set_hidden(text_layer_get_layer(s_textlayer_hr), false);
+    // show counter
   layer_set_hidden(text_layer_get_layer(s_textlayer_count), false);
 
 
@@ -231,7 +210,6 @@ void handle_press_back(ClickRecognizerRef recognizer, void *context) {
     // hide counter
     layer_set_hidden(text_layer_get_layer(s_textlayer_count), true);
     layer_set_hidden(text_layer_get_layer(s_textlayer_over), true);
-    layer_set_hidden(text_layer_get_layer(s_textlayer_hr), true);
 
     // show all others
     layer_set_hidden(text_layer_get_layer(s_textlayer_60), false);
@@ -259,7 +237,12 @@ void click_config_provider(void *context) {
 void refresh_settings() {
   layer_set_hidden(text_layer_get_layer(s_textlayer_count), true);
   layer_set_hidden(text_layer_get_layer(s_textlayer_over), true);
-  layer_set_hidden(text_layer_get_layer(s_textlayer_hr), true);
+
+  if (!settings.theme) {
+//    layer_set_hidden(inverter_layer_get_layer(s_inverterlayer_theme), true);
+  } else {
+//    layer_set_hidden(inverter_layer_get_layer(s_inverterlayer_theme), false);
+  }
 
   snprintf(m_up, sizeof(m_up), "%d", settings.up);
   snprintf(m_select, sizeof(m_select), "%d", settings.select);
@@ -294,12 +277,6 @@ void process_tuple(Tuple *t) {
   refresh_settings();
 }
 
-static void prv_on_health_data(HealthEventType type, void *context) {
-  if (type == HealthEventHeartRateUpdate) {
-    s_curr_hr = (int16_t) health_service_peek_current_value(HealthMetricHeartRateBPM);
-  }
-}
-
 void in_received_handler(DictionaryIterator *iter, void *context) {
 
   // Check for fields you expect to receive
@@ -322,7 +299,6 @@ void in_received_handler(DictionaryIterator *iter, void *context) {
 
 static void handle_window_unload(Window* window) {
   destroy_ui();
-  bool ok = health_service_set_heart_rate_sample_period(0);
 }
 
 static void handle_window_load(Window* window) {
@@ -338,17 +314,6 @@ void deinit(void) {
 
 void init(void) {
   initialise_ui();
-
-  // nice fonts for different systems
-  // #ifndef PBL_PLATFORM_APLITE
-    // s_res_roboto_bold_subset_49 = fonts_get_system_font(FONT_KEY_LECO_42_NUMBERS);
-    // s_res_roboto_condensed_21 = fonts_get_system_font(FONT_KEY_LECO_32_BOLD_NUMBERS);
-
-    // text_layer_set_font(s_textlayer_count, s_res_roboto_bold_subset_49);
-    // text_layer_set_text(s_textlayer_over, "0:00");
-    // text_layer_set_font(s_textlayer_over, s_res_roboto_condensed_21);
-  // #endif
-
   window_set_window_handlers(s_window, (WindowHandlers) {
     .load = handle_window_load,
     .unload = handle_window_unload,
@@ -360,17 +325,6 @@ void init(void) {
   APP_LOG(APP_LOG_LEVEL_INFO, "migrate_persist");
   migrate_persist(&settings);
   window_stack_push(s_window, true);
-
-   #if PBL_API_EXISTS(health_service_set_heart_rate_sample_period)
-     health_service_set_heart_rate_sample_period(1);
-   #endif
-
-   // #if defined(PBL_HEALTH)
-     // Subscribe and init the health handler
-     s_curr_hr = (int16_t) health_service_peek_current_value(HealthMetricHeartRateBPM);
-     APP_LOG(APP_LOG_LEVEL_INFO, "hr: %lu", (uint32_t) s_curr_hr);
-     health_service_events_subscribe(prv_on_health_data, NULL);
-   // #endif
 }
 
 int main(void) {
