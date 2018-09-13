@@ -47,7 +47,7 @@ Pebble.addEventListener('ready', function (e) {
 
 Pebble.addEventListener('showConfiguration', function (e) {
 //	console.log('Configuration window opened. ');
-  Pebble.openURL('http://remy.github.io/rest/config.html');
+  Pebble.openURL('http://clach04.github.io/pebble/rest/config.html');
 });
 
 Pebble.addEventListener('webviewclosed', function (e) {
