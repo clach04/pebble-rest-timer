@@ -45,13 +45,14 @@ Pebble.addEventListener('ready', function (e) {
   initialized = true;
 });
 
-Pebble.addEventListener('showConfiguration', function () {
+Pebble.addEventListener('showConfiguration', function (e) {
+//	console.log('Configuration window opened. ');
   Pebble.openURL('http://remy.github.io/rest/config.html');
 });
 
 Pebble.addEventListener('webviewclosed', function (e) {
-  // console.log('Configuration closed');
-  // console.log('Response = ' + e.response.length + '   ' + e.response);
+  //console.log('Configuration closed');
+  //console.log('Response = ' + e.response.length + '   ' + e.response);
   if (e.response) { // user clicked Save/Submit, not Cancel/Done
     // console.log('User hit save');
     values = JSON.parse(decodeURIComponent(e.response));

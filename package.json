@@ -1,0 +1,53 @@
+{
+  "version": "2.0.0",
+  "author": "remy@leftlogic.com",
+  "private": true,
+  "dependencies": {},
+  "keywords": [
+    "pebble-app"
+  ],
+  "pebble": {
+    "sdkVersion": "3",
+    "resources": {
+      "media": [
+        {
+          "type": "png",
+          "name": "IMAGE_GO",
+          "file": "images/go-light.png"
+        },
+        {
+          "menuIcon": true,
+          "type": "png",
+          "name": "IMAGE_LOG_NEW",
+          "file": "images/new-icon.png"
+        }
+      ]
+    },
+    "projectType": "native",
+    "uuid": "2aa4a9d5-9e9c-42d8-900e-94ed581ef0a8",
+    "messageKeys": {
+      "down": 2,
+      "theme": 3,
+      "up": 0,
+      "select": 1
+    },
+    "enableMultiJS": false,
+    "displayName": "Rest",
+    "watchapp": {
+      "onlyShownOnCommunication": false,
+      "hiddenApp": false,
+      "watchface": false
+    },
+    "targetPlatforms": [
+      "aplite",
+      "basalt",
+      "diorite",
+      "emery"
+    ],
+    "capabilities": [
+      "configurable",
+      "health"
+    ]
+  },
+  "name": "Rest"
+}
