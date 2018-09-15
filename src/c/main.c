@@ -253,48 +253,44 @@ void refresh_settings() {
   text_layer_set_text(s_textlayer_60, m_down);
 }
 
-void process_tuple(Tuple *t) {
-  int key = t->key;
-  int value = t->value->int32;
+void in_received_handler(DictionaryIterator *iterator, void *context) {
 
-  APP_LOG(APP_LOG_LEVEL_DEBUG, "Loaded key num: %d with value %d", key, value);
+  Tuple *t=NULL;
 
-  switch (key) {
-    case UP_KEY:
-      settings.up = value;
-      break;
-    case SELECT_KEY:
-      settings.select = value;
-      break;
-    case DOWN_KEY:
-      settings.down = value;
-      break;
-    case THEME_KEY:
-      settings.theme = value;
-      break;
-  }
-
-  refresh_settings();
-}
-
-void in_received_handler(DictionaryIterator *iter, void *context) {
-
-  // Check for fields you expect to receive
-  // Tuple *text_tuple = dict_find(iter, UP_KEY);
-
-  // (void)context;
-
-  Tuple *t = dict_read_first(iter);
-  if (t) {
-    process_tuple(t);
-  }
-
-  while(t != NULL) {
-    t = dict_read_next(iter);
-    if(t) {
-      process_tuple(t);
+    //APP_LOG(APP_LOG_LEVEL_DEBUG, "in_received_handler() called");
+    t = dict_find(iterator, MESSAGE_KEY_up);
+    if (t)
+    {
+	    settings.up = t->value->int32;
     }
-  }
+
+    t = dict_find(iterator, MESSAGE_KEY_select);
+    if (t)
+    {
+	    settings.select = t->value->int32;
+    }
+
+    t = dict_find(iterator, MESSAGE_KEY_down);
+    if (t)
+    {
+	    settings.down = t->value->int32;
+    }
+
+    t = dict_find(iterator, MESSAGE_KEY_theme);
+    if (t)
+    {
+	    settings.theme = t->value->int32;
+    }
+
+      refresh_settings();
+
+	/*
+    t = dict_read_first(iterator);
+    while(t != NULL) {
+	APP_LOG(APP_LOG_LEVEL_DEBUG, "\t key %d", (int) t->key);
+	    t = dict_read_next(iterator);
+	}
+	*/
 }
 
 static void handle_window_unload(Window* window) {

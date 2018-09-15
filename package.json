@@ -10,13 +10,13 @@
             "configurable"
         ], 
         "displayName": "Rest", 
-        "enableMultiJS": false, 
-        "messageKeys": {
-            "down": 2, 
-            "select": 1, 
-            "theme": 3, 
-            "up": 0
-        }, 
+        "enableMultiJS": true,
+        "messageKeys": [
+            "down",
+            "select",
+            "theme",
+            "up"
+        ],
         "projectType": "native", 
         "resources": {
             "media": [

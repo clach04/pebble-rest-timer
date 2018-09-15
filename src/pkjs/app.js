@@ -56,7 +56,7 @@ Pebble.addEventListener('webviewclosed', function (e) {
   if (e.response) { // user clicked Save/Submit, not Cancel/Done
     // console.log('User hit save');
     values = JSON.parse(decodeURIComponent(e.response));
-    // console.log('stringified options: ' + JSON.stringify((values)));
+    console.log('stringified options: ' + JSON.stringify((values)));
 
     Pebble.sendAppMessage(values);
     // Pebble.sendAppMessage(values, function () {
