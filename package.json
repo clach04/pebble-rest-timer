@@ -1,5 +1,5 @@
 {
-    "author": "remy@leftlogic.com", 
+    "author": "clach04",
     "dependencies": {}, 
     "keywords": [
         "pebble-app"
@@ -39,7 +39,7 @@
             "basalt", 
             "diorite" 
         ], 
-        "uuid": "2aa4a9d5-9e9c-42d8-900e-94ed581ef0a8", 
+        "uuid": "14d52ec9-c32b-40a4-b8e9-68a5174cd602",
         "watchapp": {
             "hiddenApp": false, 
             "onlyShownOnCommunication": false, 
