@@ -6,10 +6,9 @@ var clay = new Clay(clayConfig, null, { autoHandleEvents: false });
 
 // as autoHandleEvents set to false need a basic showConfiguration action
 Pebble.addEventListener('showConfiguration', function(e) {
-	// for what ever reason this then causes Clay display to work in emulatpr
-	// // NOTE save works with web app, but then get error and pebble never receives data/config with my quick test
-	var emulator = !Pebble || Pebble.platform === 'pypkjs';
-        console.log('showConfiguration');
+    // for what ever reason this then causes Clay display to work in emulatpr
+    var emulator = !Pebble || Pebble.platform === 'pypkjs';
+    console.log('showConfiguration');
     console.log('emulator  =' + JSON.stringify(emulator));
 
     Pebble.openURL(clay.generateUrl());
