@@ -1,35 +1,32 @@
-var Clay = require('./clay.js');
-var clayConfig = require('./config');
-//var clay = new Clay(clayConfig);
-var clay = new Clay(clayConfig, null, { autoHandleEvents: false });
+'use strict';
 
+/*global Pebble*/
+var values = null;
+var initialized = false;
 
-// as autoHandleEvents set to false need a basic showConfiguration action
-Pebble.addEventListener('showConfiguration', function(e) {
-    // for what ever reason this then causes Clay display to work in emulatpr
-    var emulator = !Pebble || Pebble.platform === 'pypkjs';
-    console.log('showConfiguration');
-    console.log('emulator  =' + JSON.stringify(emulator));
-
-    Pebble.openURL(clay.generateUrl());
+Pebble.addEventListener('ready', function (e) {
+  // console.log('connect: ' + e.ready);
+  // console.log(e.type);
+  initialized = true;
 });
 
-Pebble.addEventListener('webviewclosed', function(e) {
-    if (e && !e.response) {
-    return;
-    }
-
-    // Get the keys and values from each config item
-    var dict = clay.getSettings(e.response);
-
-    console.log('string config data =' + JSON.stringify(dict));
-    console.log('string config data length=' + JSON.stringify(dict).length);
-    // Send settings values to watch side
-    Pebble.sendAppMessage(dict, function(e) {
-        console.log('Sent config data to Pebble');
-    }, function(e) {
-        console.log('Failed to send config data!');
-        //console.log(JSON.stringify(e));
-    });
+Pebble.addEventListener('showConfiguration', function (e) {
+//	console.log('Configuration window opened. ');
+  Pebble.openURL('https://clach04.github.io/pebble-rest-timer/config.html');
 });
 
+Pebble.addEventListener('webviewclosed', function (e) {
+  //console.log('Configuration closed');
+  //console.log('Response = ' + e.response.length + '   ' + e.response);
+  if (e.response) { // user clicked Save/Submit, not Cancel/Done
+    // console.log('User hit save');
+    values = JSON.parse(decodeURIComponent(e.response));
+    console.log('stringified options: ' + JSON.stringify((values)));
+    Pebble.sendAppMessage(values);
+    // Pebble.sendAppMessage(values, function () {
+    //   // console.log('Successfully sent options to Pebble');
+    // }, function (e) {
+    //   // console.log('Failed to send options to Pebble.\nError: ' + e.error.message);
+    // });
+  }
+});
